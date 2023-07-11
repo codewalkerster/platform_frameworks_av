@@ -99,7 +99,10 @@ AidlProviderInfo::AidlProviderInfo(
 status_t AidlProviderInfo::initializeAidlProvider(
         std::shared_ptr<ICameraProvider>& interface, int64_t currentDeviceState) {
 
-    status_t res = parseProviderName(mProviderName, &mType, &mId);
+    using aidl::android::hardware::camera::provider::ICameraProvider;
+    std::string extractedProviderName =
+            mProviderName.substr(std::string(ICameraProvider::descriptor).size() + 1);
+    status_t res = parseProviderName(extractedProviderName, &mType, &mId);
     if (res != OK) {
         ALOGE("%s: Invalid provider name, ignoring", __FUNCTION__);
         return BAD_VALUE;
@@ -277,7 +280,8 @@ const std::shared_ptr<ICameraProvider> AidlProviderInfo::startProviderInterface(
             interface =
                             ICameraProvider::fromBinder(
                                     ndk::SpAIBinder(
-                                                AServiceManager_getService(mProviderName.c_str())));
+                                                AServiceManager_waitForService(
+                                                        mProviderName.c_str())));
 
             // Set all devices as ENUMERATING, provider should update status
             // to PRESENT after initializing.

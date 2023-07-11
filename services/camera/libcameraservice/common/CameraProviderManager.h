@@ -488,7 +488,7 @@ private:
                 CameraProviderManager *manager);
         ~ProviderInfo();
 
-        virtual IPCTransport getIPCTransport() = 0;
+        virtual IPCTransport getIPCTransport() const = 0;
 
         const std::string& getType() const;
 
