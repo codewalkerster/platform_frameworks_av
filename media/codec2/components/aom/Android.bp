@@ -18,6 +18,8 @@ cc_library {
     // so only 1 of them has the official c2.android.av1.decoder name
     cflags: [
         "-DCODECNAME=\"c2.android.av1-aom.decoder\"",
+		"-mcpu=cortex-a53",
+        "-march=armv8-a",
     ],
 
     srcs: ["C2SoftAomDec.cpp"],
@@ -31,6 +33,10 @@ cc_library {
         "libcodec2_soft_sanitize_all-defaults",
     ],
 
+	cflags: [
+        "-mcpu=cortex-a53",
+        "-march=armv8-a",
+    ],
     static_libs: ["libaom"],
 
     srcs: ["C2SoftAomEnc.cpp"],
